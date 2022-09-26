@@ -14,6 +14,7 @@ router.post('/login', login);
 
 
 async function login(req,res){
+    try{
     const {email,password} = req.body;
 
     if(!email || !password){
@@ -37,11 +38,15 @@ async function login(req,res){
         success: true,
         data: {id: user.id, name: user?.name, email: user?.email,  token},
     });
-
+    }
+    catch(err){
+        return res.json({success: false, message: err.message});
+    }
 }   
 
 
 async function register(req,res){
+  try{
     const {name,email,password} = req.body;
 
     if(!name || !email || !password){
@@ -64,7 +69,10 @@ async function register(req,res){
         message: 'User Regisgtered Successfully',
         data: newUser
     });
-
+  }
+  catch (err){
+    return res.json({success: false, message: err.message});
+  }
 }
 
 

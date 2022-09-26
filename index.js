@@ -25,7 +25,7 @@ mongoose.connect(
 
 //Initialize Routes.
 app.use('/api/auth', require('./Controllers/AuthController'));
-
+app.use('/api/posts',require('./Controllers/PostController'));
 
 
 //error handling middleware

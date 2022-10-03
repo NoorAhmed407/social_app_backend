@@ -59,10 +59,8 @@ async function addPost(req,res){
         
         if(req.file){
             image = req.file.path;
-            return res.json({image});
         }
         
-        return
         let post = await Post.create({
             title,
             description,
@@ -103,7 +101,7 @@ function editPost(req,res){
 //GetPosts
 async function getPosts(req,res){
     try{
-        const posts = await Post.find({}).populate({path: 'postedBy', select: ['name profile_pic']});
+        const posts = await Post.find({}).populate({path: 'postedBy', select: '-password -__v'});
         return res.json({success: true, message: 'Posts get Successfully', data: posts});
     }
 

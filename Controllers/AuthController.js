@@ -32,7 +32,7 @@ async function login(req,res){
         return res.status(400).json({success: false, message: 'Invalid Credentials'});
     }
 
-    const token = jwt.sign({...user},process.env.SALT_KEY, {expiresIn: "2h"});
+    const token = jwt.sign({name: user.name, email: user.email, id: user._id},process.env.SALT_KEY, {expiresIn: "2h"});
 
     return res.status(200).json({
         message: 'User LoggedIn Successfully',

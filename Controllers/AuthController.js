@@ -34,6 +34,7 @@ async function login(req,res){
     const token = jwt.sign({...user},process.env.SALT_KEY, {expiresIn: "2h"});
 
     return res.status(200).json({
+        message: 'User LoggedIn Successfully',
         success: true,
         data: {id: user.id, name: user?.name, email: user?.email,  token},
     });

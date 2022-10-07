@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt= require('jsonwebtoken');
 const User = require('../Models/Users');
+const Post = require('../Models/Posts');
 const authMiddleware = require('./../Middlewares/AuthMiddleware');
 
 require('dotenv').config();
@@ -10,6 +11,31 @@ require('dotenv').config();
 
 router.post('/register', register);
 router.post('/login', login);
+router.get('/user', authMiddleware, getUserDetails);
+
+
+
+async function getUserDetails(req,res){
+    let authUser = req?.user;
+    try{
+        const data = await User.findOne({_id: authUser?.id}).select('-password -createdAt -updatedAt -__v');
+        const postsData = await Post.find({postedBy: authUser?.id }).select('-postedBy -createdAt -updatedAt -__v');
+        if(data){
+            return res.status(200).json({
+                message: 'User Details Fetched Successfully',
+                success: true,
+                data: {...data?._doc, posts: postsData},
+            });
+        }
+        else{
+        return res.json({success: false, message: err.message});
+
+        }
+    }
+    catch(err){
+        return res.json({success: false, message: err.message});
+    }
+}
 
 
 
@@ -66,9 +92,8 @@ async function register(req,res){
 
     
     return res.status(200).json({
-        success: true.valueOf,
-        message: 'User Regisgtered Successfully',
-        data: newUser
+        success: true,
+        message: 'User Registered Successfully',
     });
   }
   catch (err){

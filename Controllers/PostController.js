@@ -81,15 +81,30 @@ async function addPost(req,res){
 
     }
 
-
-
-
 }
 
 
 //DeletePost
-function deletePost(req,res){
-    
+async function deletePost(req,res){
+    const {post_id} = req?.body;
+    if(!post_id){
+      return res?.status(400).json({"success": false, message: "post_id is Required"});
+    }
+    try{
+      let data = await Post.findByIdAndDelete(post_id);
+      console.log("dataaaaaaa", data);
+      if(data){
+        return res?.status(200).json({"success": true, message: "Record Deleted Successfully"});
+      }
+      else{
+        return res?.status(400).json({"success": false, message: "Something Went Wrong!"});
+
+      }
+    }
+    catch(err){
+      return res?.status(500).json({"success": false, message: err.message});
+
+    }
 }
 
 
